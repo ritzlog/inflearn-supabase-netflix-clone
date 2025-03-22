@@ -9,17 +9,26 @@ function handleError(error) {
   }
 }
 
-export async function searchMovies(search = "") {
+export async function searchMovies({ search, page, pageSize }) {
   const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("movie")
     .select("*")
-    .like("title", `%${search}%`);
+    .like("title", `%${search}%`)
+    .range((page - 1) * pageSize, page * pageSize - 1);
 
-  handleError(error);
+  if (error) {
+    console.error(error);
+    return {
+      data: [],
+      page: null,
+      pageSize: null,
+      error,
+    };
+  }
 
-  return data;
+  return { data, page, pageSize };
 }
 
 export async function getMovie(id) {
