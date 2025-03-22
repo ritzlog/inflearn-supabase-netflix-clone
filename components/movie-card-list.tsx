@@ -19,22 +19,22 @@ export default function MovieCardList() {
       queryFn: ({ pageParam }) =>
         searchMovies({ search, page: pageParam, pageSize: 12 }),
       getNextPageParam: (lastPage) =>
-        lastPage.page ? lastPage.page + 1 : null,
+        lastPage.data.length ? lastPage.page + 1 : null,
     });
 
   const { ref, inView } = useInView({
     threshold: 0,
   });
 
-  useEffect(() => {
-    console.log("inView: " + inView + ", hasNextPage: " + hasNextPage);
-  }, [inView, hasNextPage]);
+  // useEffect(() => {
+  //   console.log("inView: " + inView + ", hasNextPage: " + hasNextPage);
+  // }, [inView, hasNextPage]);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetching && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage]);
+  }, [inView]);
 
   return (
     <div className="grid gap-1 md:grid-cols-4 gird-cols-3 w-full h-full">
