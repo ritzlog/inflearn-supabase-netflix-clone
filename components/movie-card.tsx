@@ -1,12 +1,30 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
+import { updateBookmark } from "actions/movieActions";
+import { queryClient } from "config/ReactQueryClientProvider";
 import Link from "next/link";
 
 export default function MovieCard({ movie }) {
+  const updateBookmarkMutation = useMutation({
+    mutationFn: () => updateBookmark(movie.id, movie.bookmarked),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["movie"] });
+    },
+  });
+
   return (
     <div className="col-span-1 relative">
       {/* Image 부분 */}
       <img src={movie.image_url} className="w-full" />
+
+      {/* Bookmark 부분 */}
+      <i
+        onClick={() => updateBookmarkMutation.mutate()}
+        className={`text-yellow-600 drop-shadow-md absolute flex items-center justify-center p-2 text-2xl top-2 right-2 z-20 ${
+          movie.bookmarked ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark"
+        }`}
+      ></i>
 
       {/* Title Dim */}
       <Link href={`/movies/${movie.id}`}>

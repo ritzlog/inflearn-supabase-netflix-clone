@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       movie: {
         Row: {
+          bookmarked: boolean
           id: number
           image_url: string
           overview: string
@@ -20,6 +21,7 @@ export type Database = {
           vote_average: number
         }
         Insert: {
+          bookmarked?: boolean
           id?: number
           image_url: string
           overview: string
@@ -29,6 +31,7 @@ export type Database = {
           vote_average: number
         }
         Update: {
+          bookmarked?: boolean
           id?: number
           image_url?: string
           overview?: string
